@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <title>Hamming code</title>
+    <script>
+        function code() {
+            let message = document.getElementById('inputData').value;
+            let mass = message.split('');
+            for (let i = 0; i < mass.length; i++) {
+                mass[i] = mass[i] * 1;
+            }
+            mass.push((mass[0] + mass[2] + mass[3]) % 2);
+            mass.push((mass[0] + mass[1] + mass[3]) % 2);
+            mass.push((mass[1] + mass[2] + mass[3]) % 2);
+            document.getElementById('codedData').value = mass.join('');
+        }
+
+
+        function decode() {
+            let sravMass = [];
+            let code = document.getElementById("codedData").value;
+            let massDecode = code.split('');
+            for (let i = 0; i < massDecode.length; i++) {
+                massDecode[i] = massDecode[i] * 1;
+                sravMass[i] = massDecode[i];
+            }
+            let mass1 = ((massDecode[0] + massDecode[2] + massDecode[3] + massDecode[4]) % 2);
+            let mass2 = ((massDecode[0] + massDecode[1] + massDecode[3] + massDecode[5]) % 2);
+            let mass3 = ((massDecode[1] + massDecode[2] + massDecode[3] + massDecode[6]) % 2);
+            if (mass1) {
+                if (!(mass2) && mass1)
+                    massDecode[0] = 1 - massDecode[0];
+                else if (!(mass3) && mass2)
+                    massDecode[2] = 1 - massDecode[2];
+                else
+                    massDecode[4] = 1 - massDecode[4];
+            } else if (mass2) {
+                if (!(mass3) && mass1)
+                    massDecode[0] = 1 - massDecode[0];
+                else if (!(mass1) && mass3)
+                    massDecode[1] = 1 - massDecode[1];
+                else
+                    massDecode[5] = 1 - massDecode[5];
+            } else if (mass3) {
+                if (!(mass2) && mass1)
+                    massDecode[2] = 1 - massDecode[2];
+                else if (!(mass1) && mass2)
+                    massDecode[1] = 1 - massDecode[1];
+                else
+                    massDecode[6] = 1 - massDecode[6];
+            } else
+                alert("Ошибок не обнаружено");
+            for (let i = 0; i < massDecode.length; i++) {
+                if (massDecode[i] != sravMass[i]) {
+                    i++;
+                    alert("Была допущеная ошибка в " + i + " " + 'элементе');
+                    break
+                }
+            }
+            document.getElementById('decodedData').value = massDecode.join('');
+        }
+
+    </script>
+</head>
+
+<body>
+<p><input type='text' id='inputData'/> input data</p>
+<p><input type='button' onclick='code()' value='Code'/></p>
+<p><input type='text' id="codedData"/> coded data</p>
+<p><input type='button' onclick='decode()' value='Decode'/></p>
+<p><input type='text' id="decodedData"/> decoded data</p>
+</body>
+</html>
